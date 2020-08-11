@@ -7,25 +7,90 @@
 # Make sure each ruby method returns a string containing a valid SQL statement.
 
 def selects_the_titles_of_all_projects_and_their_pledge_amounts_alphabetized_by_title
-  "Write your SQL query Here"
+  <<-SQL
+  SELECT
+    title, sum(amount)
+  FROM
+    projects
+  JOIN pledges
+  ON pledges.project_id = projects.id
+  GROUP BY
+    title
+  ORDER BY
+  title
+  SQL
 end
 
 def selects_the_user_name_age_and_pledge_amount_for_all_pledges_alphabetized_by_name
-  "Write your SQL query Here"
+  <<-SQL
+  SELECT
+    users.name, users.age, sum(amount)
+  FROM
+    users
+  JOIN 
+    pledges ON pledges.user_id = users.id
+  GROUP BY
+    users.name
+  ORDER BY
+    users.name
+  SQL
 end
 
 def selects_the_titles_and_amount_over_goal_of_all_projects_that_have_met_their_funding_goal
-  "Write your SQL query Here"
+  <<-SQL
+  SELECT
+    projects.title, (sum(pledges.amount) - projects.funding_goal)
+  FROM
+    projects
+  JOIN 
+    pledges ON pledges.project_id = projects.id
+  GROUP BY
+    projects.title
+  HAVING
+    sum(pledges.amount) >= projects.funding_goal
+  SQL
 end
 
 def selects_user_names_and_amounts_of_all_pledges_grouped_by_name_then_orders_them_by_the_summed_amount
-  "Write your SQL query Here"
+  <<-SQL
+  SELECT
+    users.name, sum(pledges.amount) as summed_pledge
+  FROM 
+    users
+  JOIN 
+    pledges ON pledges.user_id = users.id
+  GROUP BY
+    users.name
+  ORDER BY
+    summed_pledge
+  SQL
 end
 
 def selects_the_category_names_and_pledge_amounts_of_all_pledges_in_the_music_category
-  "Write your SQL query Here"
+  <<-SQL
+  SELECT
+    projects.category, pledges.amount
+  FROM 
+    projects
+  JOIN 
+    pledges ON pledges.project_id = projects.id
+  WHERE
+    projects.category = "music"
+  SQL
 end
 
 def selects_the_category_name_and_the_sum_total_of_the_all_its_pledges_for_the_books_category
-  "Write your SQL query Here"
+  <<-SQL
+    SELECT
+      projects.category, sum(pledges.amount)
+    FROM
+      projects
+    JOIN
+      pledges ON pledges.project_id = projects.id
+    GROUP BY 
+      projects.category
+    HAVING 
+      projects.category = "books"
+
+  SQL
 end
